@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--META-->
+  <title>SK8FAMILY — Streetwear de skate</title>
+  <meta name="description" content="SK8FAMILY: streetwear feito por quem vive o skate. Camisetas, moletons, calças e bonés em drops limitados." />
+  <!--/META-->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0f0f0f" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Permanent+Marker&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="topbar">Frete fixo para todo o Brasil · Pedido direto pelo WhatsApp</div>
+  <header id="header" class="header">
+    <div class="header-inner">
+      <a href="/" class="logo" aria-label="SK8FAMILY, página inicial">SK8<span>FAMILY</span></a>
+      <nav class="nav-desktop" id="nav-desktop"></nav>
+      <div class="header-icons">
+        <a href="/produtos?foco=1" aria-label="Buscar peças" data-icon="search"></a>
+        <a href="/contato" aria-label="Atendimento" class="hide-xs" data-icon="user"></a>
+        <a href="/favoritos" aria-label="Favoritos" class="bag-link"><span data-icon="heart"></span><span class="bag-count" id="fav-count" hidden>0</span></a>
+        <a href="/sacola" aria-label="Sacola" class="bag-link"><span data-icon="bag"></span><span class="bag-count" id="bag-count">0</span></a>
+        <button class="menu-btn" id="menu-btn" aria-label="Menu" data-icon="menu"></button>
+      </div>
+    </div>
+    <nav class="nav-mobile" id="nav-mobile" hidden></nav>
+  </header>
+
+  <main id="app"></main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <p class="logo">SK8<span>FAMILY</span></p>
+        <p class="muted-text">Streetwear feito por quem vive o skate. Drops limitados, da rua para a rua.</p>
+      </div>
+      <div class="footer-col">
+        <p class="eyebrow">Navegue</p>
+        <a href="/colecoes">Coleções</a>
+        <a href="/produtos">Produtos</a>
+        <a href="/favoritos">Favoritos</a>
+        <a href="/sobre">Sobre a marca</a>
+      </div>
+      <div class="footer-col">
+        <p class="eyebrow">Atendimento</p>
+        <div id="footer-contatos" class="footer-col"></div>
+      </div>
+    </div>
+    <p class="footer-bottom">SK8FAMILY · Skate or die · Enviamos para todo o Brasil</p>
+  </footer>
+
+  <div id="toast-root" class="toast-root" aria-live="polite"></div>
+
+  <script src="/catalog.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

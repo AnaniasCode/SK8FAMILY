@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect width="600" height="600" fill="#1c1c1c"/><path d="M214 118 Q300 30 386 118 Q300 150 214 118 Z" fill="#3a4230" stroke="rgba(255,255,255,.22)" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M214 118 L128 150 L50 420 L118 442 L168 290 L168 520 L432 520 L432 290 L482 442 L550 420 L472 150 L386 118 Q300 190 214 118 Z" fill="#3a4230" stroke="rgba(255,255,255,.22)" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="168" y="506" width="264" height="26" fill="#3a4230" stroke="rgba(255,255,255,.22)" stroke-width="3"/>
+      <path d="M222 400 L378 400 L400 480 L200 480 Z" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="3" stroke-linejoin="round"/>
+           <path d="M280 170 L276 250 M320 170 L324 250" stroke="rgba(255,255,255,.22)" stroke-width="3" stroke-linecap="round"/><rect x="346" y="241" width="44" height="18" fill="#d4ff1f"/><text transform="translate(588 584) rotate(-90)" font-family="monospace" font-size="13" letter-spacing="2" fill="rgba(255,255,255,.3)">MOCKUP · FOTO EM BREVE</text></svg>

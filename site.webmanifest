@@ -1,0 +1,8 @@
+{
+  "name": "SK8FAMILY",
+  "short_name": "SK8FAMILY",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }],
+  "theme_color": "#0f0f0f",
+  "background_color": "#0f0f0f",
+  "display": "browser"
+}
