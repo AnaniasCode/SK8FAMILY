@@ -124,14 +124,18 @@ window.SK8 = (function () {
   const colecoes = Array.from(new Set(modelos.map((m) => m.collection)));
   const tipos = Array.from(new Set(modelos.map((m) => m.tipo))).map((id) => ({ id, nome: TIPOS[id].nome }));
 
-  // Slides da página inicial (carrossel).
+  // Slides da página inicial (carrossel). Fotos do Instagram da marca.
   //   etiqueta: selo pequeno · titulo: linha cheia · contorno: linha só com contorno
-  //   botao + href: botão principal · slug: peça mostrada ao lado enquanto não há foto
-  //   img: foto de fundo do slide, ex.: "/assets/hero_1.jpg" (fica em preto e branco sozinha)
+  //   botao + href: botão principal
+  //   img: foto de fundo (fica em preto e branco sozinha) · pos: parte da foto que fica à mostra
+  //        ("center 70%" = mais para baixo, "center 30%" = mais para cima)
+  //   Sem img, o slide mostra a peça do "slug" sobre fundo preto.
   const heroSlides = [
-    { etiqueta: "Drop 01 · No ar", titulo: "Feito na rua.", contorno: "Pra rua.", botao: "Ver o drop", href: "/produtos?colecao=Drop%2001", slug: "camiseta-oversized-family", img: "", colecao: "Drop 01" },
-    { etiqueta: "Drop 01 · Limitado", titulo: "Malha pesada.", contorno: "Corte largo.", botao: "Ver o moletom", href: "/produtos/moletom-pesado-drop-01", slug: "moletom-pesado-drop-01", img: "", colecao: "Drop 01" },
-    { etiqueta: "Tiragem limitada", titulo: "Acabou,", contorno: "acabou.", botao: "Ver todas as peças", href: "/produtos", slug: "calca-cargo-sarja", img: "", colecao: "Drop 01" },
+    { etiqueta: "Drop 01 · No ar", titulo: "Feito na rua.", contorno: "Pra rua.", botao: "Ver o drop", href: "/produtos?colecao=Drop%2001", img: "/assets/hero_1.jpg", pos: "center 78%" },
+    { etiqueta: "A família na pista", titulo: "Sessão", contorno: "todo dia.", botao: "Ver todas as peças", href: "/produtos", img: "/assets/hero_2.jpg", pos: "center 62%" },
+    { etiqueta: "Drop 01 · Limitado", titulo: "Malha pesada.", contorno: "Corte largo.", botao: "Ver o moletom", href: "/produtos/moletom-pesado-drop-01", img: "/assets/hero_3.jpg", pos: "center 24%" },
+    { etiqueta: "Desde 2014", titulo: "Bem-vindo", contorno: "à família.", botao: "Conhecer a família", href: "/sobre", img: "/assets/hero_4.jpg", pos: "center 40%" },
+    { etiqueta: "Tiragem limitada", titulo: "Acabou,", contorno: "acabou.", botao: "Ver as camisetas", href: "/produtos?tipo=camiseta", img: "/assets/hero_5.jpg", pos: "center 55%" },
   ];
 
   function whatsLink(phone, text) {

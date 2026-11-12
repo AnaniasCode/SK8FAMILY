@@ -2,7 +2,8 @@
 
 Loja da SK8FAMILY em HTML, CSS e JavaScript puros, sem dependências.
 
-> As peças, os preços e os textos atuais são **exemplos**, e as fotos são **mockups** (desenhos).
+> As peças, os preços e os textos atuais são **exemplos**, e as fotos das peças são **mockups** (desenhos).
+> As fotos do carrossel (`assets/hero_1.jpg` a `hero_5.jpg`) vieram do Instagram da marca.
 > Troque pelos dados e fotos reais antes de divulgar.
 
 ## Onde editar
@@ -22,7 +23,7 @@ Em `catalog.js`, preencha:
 ## Trocar os mockups por fotos
 1. Salve as fotos em `assets/produtos/` como `peca_N_frente.jpg`, `peca_N_costas.jpg` e `peca_N_conjunto.jpg` (N é o primeiro número da peça em `catalog.js`).
 2. Em `catalog.js`, mude `EXT_FOTO` de `"svg"` para `"jpg"`.
-3. Para foto de fundo no carrossel da página inicial, preencha `img` em `heroSlides` (ex.: `"/assets/hero_1.jpg"`).
+3. Para trocar as fotos do carrossel da página inicial, substitua `assets/hero_N.jpg` ou edite `heroSlides` (`img` é a foto e `pos` a parte dela que fica à mostra).
 
 As fotos aparecem em preto e branco no site (filtro no `styles.css`), mesmo que o arquivo seja colorido.
 

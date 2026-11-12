@@ -249,14 +249,14 @@
   let heroTimer = null;
 
   function Home() {
-    const faixa = Array(8).fill(`<span>${esc(heroSlides[0].colecao)} · Peças limitadas · Pedido pelo WhatsApp<i>✦</i></span>`).join("");
+    const faixa = Array(8).fill(`<span>${esc(colecoes[0])} · Peças limitadas · Pedido pelo WhatsApp<i>✦</i></span>`).join("");
     const destaque = (sl) => modelos.find((m) => m.slug === sl.slug) || modelos[0];
     const drop = modelos.filter((m) => m.collection === colecoes[0]);
     const pilares = PILARES;
     app.innerHTML = `
       <section class="hero" aria-roledescription="carrossel" aria-label="Destaques">
         ${heroSlides.map((sl, k) => `<div class="hero-slide ${k === 0 ? "on" : ""}" data-k="${k}">
-          ${sl.img ? `<img src="${esc(sl.img)}" alt="" class="cover"><div class="fade"></div>` : `<div class="hero-piece">${IMG(destaque(sl).fotos.frente, destaque(sl).name)}</div>`}
+          ${sl.img ? `<img src="${esc(sl.img)}" alt="" class="cover" style="object-position:${esc(sl.pos || "center")}" ${k ? 'loading="lazy"' : ""}><div class="fade"></div>` : `<div class="hero-piece">${IMG(destaque(sl).fotos.frente, destaque(sl).name)}</div>`}
         </div>`).join("")}
         <div class="hero-content"><div id="hero-text"></div></div>
         <button class="hero-arrow prev" aria-label="Slide anterior">${icon("left")}</button>
