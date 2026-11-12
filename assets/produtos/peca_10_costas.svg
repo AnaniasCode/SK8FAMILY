@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect width="600" height="600" fill="#1c1c1c"/><path d="M140 380 Q140 180 300 180 Q460 180 460 380 Z" fill="#ece7da" stroke="rgba(0,0,0,.28)" stroke-width="3"/>
-         <path d="M240 380 Q300 300 360 380 Z" fill="#1c1c1c" stroke="rgba(0,0,0,.28)" stroke-width="3"/>
-         <rect x="236" y="368" width="128" height="16" fill="#ece7da" stroke="rgba(0,0,0,.28)" stroke-width="3"/>
-         <path d="M300 180 L300 316" stroke="rgba(0,0,0,.28)" stroke-width="2"/><text transform="translate(588 584) rotate(-90)" font-family="monospace" font-size="13" letter-spacing="2" fill="rgba(255,255,255,.3)">MOCKUP · FOTO EM BREVE</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect width="600" height="600" fill="#d9d7d2"/><path d="M140 380 Q140 180 300 180 Q460 180 460 380 Z" fill="#ece7da" stroke="rgba(0,0,0,.4)" stroke-width="3"/>
+         <path d="M240 380 Q300 300 360 380 Z" fill="#d9d7d2" stroke="rgba(0,0,0,.4)" stroke-width="3"/>
+         <rect x="236" y="368" width="128" height="16" fill="#ece7da" stroke="rgba(0,0,0,.4)" stroke-width="3"/>
+         <path d="M300 180 L300 316" stroke="rgba(0,0,0,.4)" stroke-width="2"/><text transform="translate(588 584) rotate(-90)" font-family="monospace" font-size="13" letter-spacing="2" fill="rgba(0,0,0,.35)">MOCKUP · FOTO EM BREVE</text></svg>

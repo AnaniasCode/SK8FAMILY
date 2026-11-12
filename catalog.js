@@ -10,7 +10,7 @@ window.SK8 = (function () {
   const WHATSAPP_PEDIDOS = "";
   // Quem atende pelo WhatsApp na página da peça. Ex.: { name: "Fulano", phone: "5511999999999" }
   const OWNERS = [];
-  const INSTAGRAM = "";      // ex.: "https://www.instagram.com/sk8family/"
+  const INSTAGRAM = "https://www.instagram.com/sk8family.oficial/";
   const SUPPORT_EMAIL = "";  // ex.: "contato@sk8family.com.br"
 
   // ---------- Pedidos ----------
@@ -61,51 +61,51 @@ window.SK8 = (function () {
   // [nº da foto, código, endereço, nome, tipo, coleção, frase curta, descrição, cor, arte, preço, selo (opcional)]
   // "mock" (último campo) só serve para desenhar o mockup: cor da peça, cor da estampa e texto.
   const raw = [
-    [1, "SK-001", "family-og-preta", "Family OG Tee — Preta", "camiseta", "Family Classics",
-      "O logo que começou tudo, em malha pesada.",
-      "Camiseta de malha pesada com o logo SK8FAMILY grande nas costas e pequeno no peito. Modelagem larga, do jeito que a sessão pede.",
-      "Preto", "Costas: logo SK8FAMILY em off-white", "R$ 119,90", "Novo",
+    [1, "SK-001", "camiseta-oversized-family", "Camiseta Oversized Family", "camiseta", "Drop 01",
+      "Corte oversized, malha pesada.",
+      "Camiseta oversized de malha pesada, com o logo SK8FAMILY nas costas e a etiqueta no peito. Modelagem larga, do jeito que a sessão pede.",
+      "Preto", "Costas: logo SK8FAMILY em off-white", "R$ 119,90", "Limitado",
       { peca: "#161616", tinta: "#f1ede2", texto: ["SK8", "FAMILY"] }],
     [2, "SK-002", "family-og-off", "Family OG Tee — Off White", "camiseta", "Family Classics",
       "A clássica da família, na versão clara.",
       "A mesma modelagem larga da OG, em off-white com estampa preta. Combina com tudo e aguenta o rolê.",
       "Off-white", "Costas: logo SK8FAMILY em preto", "R$ 119,90", "",
       { peca: "#ece7da", tinta: "#141414", texto: ["SK8", "FAMILY"] }],
-    [3, "SK-003", "no-comply", "No Comply Tee", "camiseta", "Street Session",
+    [3, "SK-003", "no-comply", "No Comply Tee", "camiseta", "Family Classics",
       "Para quem não segue regra de ninguém.",
-      "Lettering No Comply em verde-limão nas costas, sobre preto. No peito, o selo da família.",
-      "Preto com arte verde-limão", "Costas: lettering No Comply", "R$ 129,90", "Novo",
-      { peca: "#161616", tinta: "#d4ff1f", texto: ["NO", "COMPLY"] }],
+      "Lettering No Comply em off-white nas costas, sobre preto. No peito, o selo da família.",
+      "Preto com arte off-white", "Costas: lettering No Comply", "R$ 129,90", "Limitado",
+      { peca: "#161616", tinta: "#f6f5f3", texto: ["NO", "COMPLY"] }],
     [4, "SK-004", "concrete-waves", "Concrete Waves Tee", "camiseta", "Bowl Riders",
       "O surf é no concreto.",
-      "Arte Concrete Waves em laranja nas costas, numa camiseta cinza-asfalto. Feita para o bowl.",
-      "Cinza-asfalto", "Costas: arte Concrete Waves em laranja", "R$ 129,90", "",
-      { peca: "#4a4b4d", tinta: "#ff5a1f", texto: ["CONCRETE", "WAVES"] }],
-    [5, "SK-005", "street-session-hoodie", "Street Session Hoodie", "moletom", "Street Session",
+      "Arte Concrete Waves em off-white nas costas, numa camiseta cinza-asfalto. Feita para o bowl.",
+      "Cinza-asfalto", "Costas: arte Concrete Waves em off-white", "R$ 129,90", "",
+      { peca: "#55555a", tinta: "#f6f5f3", texto: ["CONCRETE", "WAVES"] }],
+    [5, "SK-005", "moletom-pesado-drop-01", "Moletom Pesado Drop 01", "moletom", "Drop 01",
       "Capuz, bolso canguru e a rua inteira pela frente.",
-      "Moletom canguru flanelado com capuz forrado e estampa Street Session nas costas. Pesado, quente e largo.",
-      "Preto", "Costas: Street Session em off-white", "R$ 249,90", "Novo",
-      { peca: "#161616", tinta: "#f1ede2", texto: ["STREET", "SESSION"] }],
+      "Moletom canguru pesado, flanelado, com capuz forrado e a estampa do Drop 01 nas costas. Quente e largo.",
+      "Preto", "Costas: estampa Drop 01 em off-white", "R$ 249,90", "Limitado",
+      { peca: "#161616", tinta: "#f1ede2", texto: ["DROP", "01"] }],
     [6, "SK-006", "bowl-riders-hoodie", "Bowl Riders Hoodie", "moletom", "Bowl Riders",
       "Para as sessões que entram pela noite.",
-      "Moletom canguru verde-militar com a arte Bowl Riders em verde-limão nas costas. Punho e barra em ribana.",
-      "Verde-militar", "Costas: Bowl Riders em verde-limão", "R$ 259,90", "",
-      { peca: "#3a4230", tinta: "#d4ff1f", texto: ["BOWL", "RIDERS"] }],
-    [7, "SK-007", "calca-baggy-preta", "Calça Baggy Family — Preta", "calca", "Street Session",
-      "Larga na medida certa para andar.",
-      "Calça baggy de sarja com cós ajustável, bolsos fundos e etiqueta SK8FAMILY. Liberdade total de movimento.",
+      "Moletom canguru grafite com a arte Bowl Riders em off-white nas costas. Punho e barra em ribana.",
+      "Grafite", "Costas: Bowl Riders em off-white", "R$ 259,90", "",
+      { peca: "#3d3d3d", tinta: "#f6f5f3", texto: ["BOWL", "RIDERS"] }],
+    [7, "SK-007", "calca-cargo-sarja", "Calça Cargo Sarja", "calca", "Drop 01",
+      "Bolso cargo e sarja que aguenta queda.",
+      "Calça cargo de sarja com bolsos laterais, cós ajustável e etiqueta SK8FAMILY. Liberdade total de movimento.",
       "Preto", "Etiqueta SK8FAMILY no bolso", "R$ 219,90", "",
-      { peca: "#161616", tinta: "#d4ff1f", texto: ["SK8"] }],
-    [8, "SK-008", "calca-baggy-caqui", "Calça Baggy Family — Cáqui", "calca", "Street Session",
+      { peca: "#161616", tinta: "#f6f5f3", texto: ["SK8"] }],
+    [8, "SK-008", "calca-baggy-caqui", "Calça Baggy Family — Cáqui", "calca", "Family Classics",
       "A baggy da família em cáqui.",
-      "A mesma modelagem baggy em sarja cáqui. Resistente para a pista, limpa para o dia a dia.",
+      "Modelagem baggy em sarja cáqui. Resistente para a pista, limpa para o dia a dia.",
       "Cáqui", "Etiqueta SK8FAMILY no bolso", "R$ 219,90", "",
-      { peca: "#a08a63", tinta: "#141414", texto: ["SK8"] }],
+      { peca: "#8f8d88", tinta: "#141414", texto: ["SK8"] }],
     [9, "SK-009", "bone-five-panel", "Boné Five Panel SK8", "bone", "Family Classics",
       "Aba reta, cinco gomos, um logo.",
       "Boné five panel de sarja com regulador e o logo SK8 bordado na frente.",
       "Preto", "Frente: logo SK8 bordado", "R$ 99,90", "",
-      { peca: "#161616", tinta: "#d4ff1f", texto: ["SK8"] }],
+      { peca: "#161616", tinta: "#f6f5f3", texto: ["SK8"] }],
     [10, "SK-010", "bone-dad-hat", "Boné Dad Hat Family", "bone", "Family Classics",
       "Aba curva e bordado discreto.",
       "Dad hat off-white com o bordado Family em preto e fecho regulável.",
@@ -124,13 +124,14 @@ window.SK8 = (function () {
   const colecoes = Array.from(new Set(modelos.map((m) => m.collection)));
   const tipos = Array.from(new Set(modelos.map((m) => m.tipo))).map((id) => ({ id, nome: TIPOS[id].nome }));
 
-  // Slides da página inicial.
-  //   palavra: texto gigante de fundo · tema: "volt" (verde-limão), "fire" (laranja) ou "bone" (off-white)
-  //   img (opcional): foto de fundo do slide, ex.: "/assets/hero_1.jpg". Sem foto, o slide usa a arte do tema.
+  // Slides da página inicial (carrossel).
+  //   etiqueta: selo pequeno · titulo: linha cheia · contorno: linha só com contorno
+  //   botao + href: botão principal · slug: peça mostrada ao lado enquanto não há foto
+  //   img: foto de fundo do slide, ex.: "/assets/hero_1.jpg" (fica em preto e branco sozinha)
   const heroSlides = [
-    { colecao: "Street Session", palavra: "SESSION", tagline: "Da calçada para o corrimão. Roupa feita para aguentar o rolê.", slug: "street-session-hoodie", tema: "volt", img: "" },
-    { colecao: "Bowl Riders", palavra: "BOWL", tagline: "O surf é no concreto. Peças para sessões que entram pela noite.", slug: "concrete-waves", tema: "fire", img: "" },
-    { colecao: "Family Classics", palavra: "FAMILY", tagline: "O logo que começou tudo. Clássicos que nunca saem da mochila.", slug: "family-og-preta", tema: "bone", img: "" },
+    { etiqueta: "Drop 01 · No ar", titulo: "Feito na rua.", contorno: "Pra rua.", botao: "Ver o drop", href: "/produtos?colecao=Drop%2001", slug: "camiseta-oversized-family", img: "", colecao: "Drop 01" },
+    { etiqueta: "Drop 01 · Limitado", titulo: "Malha pesada.", contorno: "Corte largo.", botao: "Ver o moletom", href: "/produtos/moletom-pesado-drop-01", slug: "moletom-pesado-drop-01", img: "", colecao: "Drop 01" },
+    { etiqueta: "Tiragem limitada", titulo: "Acabou,", contorno: "acabou.", botao: "Ver todas as peças", href: "/produtos", slug: "calca-cargo-sarja", img: "", colecao: "Drop 01" },
   ];
 
   function whatsLink(phone, text) {

@@ -23,7 +23,7 @@
     if (img.dataset.fb) return;
     img.dataset.fb = "1";
     const label = img.alt || "SK8FAMILY";
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect width="600" height="600" fill="#1c1c1c"/><text x="300" y="295" text-anchor="middle" font-family="Impact,'Arial Black',sans-serif" font-size="64" letter-spacing="3" fill="#d4ff1f">SK8FAMILY</text><text x="300" y="340" text-anchor="middle" font-family="monospace" font-size="18" fill="#a3a099">${esc(label)}</text></svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect width="600" height="600" fill="#d9d7d2"/><text x="300" y="295" text-anchor="middle" font-family="Impact,'Arial Black',sans-serif" font-size="64" letter-spacing="3" fill="#080808">SK8FAMILY</text><text x="300" y="340" text-anchor="middle" font-family="monospace" font-size="18" fill="#5d5b57">${esc(label)}</text></svg>`;
     img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   };
   const IMG = (src, alt, cls = "", extra = "") => `<img src="${esc(src)}" alt="${esc(alt)}" class="${cls}" ${extra} onerror="__imgFallback(this)">`;
@@ -71,7 +71,7 @@
   }
 
   /* ---------- Header / navegação ---------- */
-  const links = [["/", "Início"], ["/colecoes", "Coleções"], ["/produtos", "Produtos"], ["/sobre", "Sobre"], ["/contato", "Contato"]];
+  const links = [["/", "Início"], ["/produtos", "Drops"], ["/colecoes", "Coleções"], ["/sobre", "A Família"], ["/contato", "Contato"]];
   const navD = document.getElementById("nav-desktop");
   const navM = document.getElementById("nav-mobile");
   navD.innerHTML = links.map(([to, l]) => `<a href="${to}" data-to="${to}">${l}</a>`).join("");
@@ -85,11 +85,14 @@
   window.addEventListener("scroll", updateHeader, { passive: true });
 
   // Rodapé: mostra só os contatos preenchidos no catalog.js
+  const instaUser = INSTAGRAM ? "@" + INSTAGRAM.replace(/\/$/, "").split("/").pop() : "";
   document.getElementById("footer-contatos").innerHTML = [
+    INSTAGRAM ? `<a href="${esc(INSTAGRAM)}" target="_blank" rel="noopener">${esc(instaUser)}</a>` : "",
     SUPPORT_EMAIL ? `<a href="mailto:${esc(SUPPORT_EMAIL)}" class="break">${esc(SUPPORT_EMAIL)}</a>` : "",
-    INSTAGRAM ? `<a href="${esc(INSTAGRAM)}" target="_blank" rel="noopener">Instagram</a>` : "",
     `<a href="/contato">Fale com a gente</a>`,
   ].join("");
+  document.getElementById("footer-marquee").innerHTML = Array(12).fill("<span>Feito na rua, pra rua<i>✦</i></span>").join("");
+  document.getElementById("ano").textContent = new Date().getFullYear();
 
   /* ---------- Componentes ---------- */
   const card = (m) => {
@@ -101,8 +104,7 @@
         <a href="/produtos/${m.slug}" class="card-track" tabindex="-1" aria-hidden="true" draggable="false">
           ${slides.map(([src, label]) => IMG(src, `${m.name} — ${label}`, "", 'loading="lazy" draggable="false"')).join("")}
         </a>
-        <span class="card-code">${m.code}</span>
-        ${m.selo ? `<span class="card-selo">${esc(m.selo)}</span>` : ""}
+        <span class="card-tag">Nº ${String(m.n).padStart(2, "0")}${m.selo ? " · " + esc(m.selo) : ""}</span>
         <button class="card-fav ${fav ? "on" : ""}" aria-pressed="${fav}" aria-label="Favoritar ${esc(m.name)}">${icon("heart")}</button>
         <button class="card-arrow prev" aria-label="Foto anterior">${icon("left")}</button>
         <button class="card-arrow next" aria-label="Próxima foto">${icon("right")}</button>
@@ -115,9 +117,9 @@
         </div>
       </div>
       <a href="/produtos/${m.slug}" class="card-info">
-        <p class="eyebrow">${esc(m.tipoNome)} · ${esc(m.collection)}</p>
         <p class="card-name">${esc(m.name)}</p>
         <p class="card-price">${m.preco}</p>
+        <p class="eyebrow">${esc(m.tipoNome)} · ${esc(m.collection)}</p>
       </a>
     </article>`;
   };
@@ -237,61 +239,48 @@
     <div class="page-title"><p class="eyebrow">${eyebrow}</p><h1>${title}</h1>${text ? `<p class="text">${text}</p>` : ""}</div>`;
   const colecaoHref = (c) => `/produtos?colecao=${encodeURIComponent(c)}`;
 
+  const PILARES = [
+    ["Feito por skatista", "Quem desenha anda. Cada peça é testada no corre, na pista e na calçada."],
+    ["Tiragem limitada", "Drops pequenos, sem reposição. Exclusivo de verdade pra família."],
+    ["Direto com a gente", "Sem intermediário: escolheu, fechou o pedido e a gente resolve."],
+  ];
+
   /* ---------- Páginas ---------- */
   let heroTimer = null;
 
   function Home() {
-    const items = ["Skate or die", "Feito para o rolê", "Malha pesada", "Drops limitados", "Da rua para a rua", "Family first"];
-    const marquee = [...items, ...items, ...items, ...items].map((t) => `<span>${t}<i aria-hidden="true">✖</i></span>`).join("");
-    const destaque = (s) => modelos.find((m) => m.slug === s.slug) || modelos[0];
+    const faixa = Array(8).fill(`<span>${esc(heroSlides[0].colecao)} · Peças limitadas · Pedido pelo WhatsApp<i>✦</i></span>`).join("");
+    const destaque = (sl) => modelos.find((m) => m.slug === sl.slug) || modelos[0];
+    const drop = modelos.filter((m) => m.collection === colecoes[0]);
+    const pilares = PILARES;
     app.innerHTML = `
       <section class="hero" aria-roledescription="carrossel" aria-label="Destaques">
-        ${heroSlides.map((s, k) => `<div class="hero-slide tema-${s.tema} ${k === 0 ? "on" : ""}" data-k="${k}">
-          ${s.img ? `<img src="${esc(s.img)}" alt="" class="cover">` : `
-          <div class="hero-word" aria-hidden="true">${esc(s.palavra)}</div>
-          <div class="hero-piece">${IMG(destaque(s).fotos.costas, destaque(s).name)}<span class="sticker">Novo drop</span></div>`}
+        ${heroSlides.map((sl, k) => `<div class="hero-slide ${k === 0 ? "on" : ""}" data-k="${k}">
+          ${sl.img ? `<img src="${esc(sl.img)}" alt="" class="cover"><div class="fade"></div>` : `<div class="hero-piece">${IMG(destaque(sl).fotos.frente, destaque(sl).name)}</div>`}
         </div>`).join("")}
-        <div class="fade"></div>
         <div class="hero-content"><div id="hero-text"></div></div>
         <button class="hero-arrow prev" aria-label="Slide anterior">${icon("left")}</button>
         <button class="hero-arrow next" aria-label="Próximo slide">${icon("right")}</button>
         <div class="hero-counter"><span id="hero-num"></span></div>
-        <div class="hero-dots">${heroSlides.map((s, k) => `<button aria-label="Ver coleção ${esc(s.colecao)}" data-k="${k}"></button>`).join("")}</div>
+        <div class="hero-dots">${heroSlides.map((sl, k) => `<button aria-label="Slide ${k + 1}: ${esc(sl.titulo)} ${esc(sl.contorno)}" data-k="${k}"></button>`).join("")}</div>
       </section>
-      <div class="marquee"><div class="marquee-track">${marquee}</div></div>
+      <div class="marquee" aria-hidden="true"><div class="marquee-track">${faixa}</div></div>
       <section class="container section">
         <div class="section-head">
-          <div><p class="eyebrow">Na pista agora</p><h2 class="h2">Últimos drops</h2></div>
-          <a href="/produtos" class="link-underline">Ver todas as peças →</a>
+          <h2 class="h2">${esc(colecoes[0])}</h2>
+          <div class="side"><p>Corte oversized, malha pesada e cara de asfalto. Quando acaba, acabou.</p><a href="/produtos" class="link-underline">Ver todas as peças →</a></div>
         </div>
-        <div class="grid grid-4">${modelos.slice(0, 8).map(card).join("")}</div>
+        <div class="grid">${drop.map(card).join("")}</div>
       </section>
-      <section class="container section" style="padding-top:0">
-        <div class="section-head"><div><p class="eyebrow">Escolha o seu rolê</p><h2 class="h2">Coleções</h2></div></div>
-        <div class="tiles">
-          ${colecoes.map((c, k) => {
-            const pecas = modelos.filter((m) => m.collection === c);
-            return `<a href="${colecaoHref(c)}" class="tile t${k % 3}">
-              <span class="tile-n">0${k + 1}</span>
-              ${IMG(pecas[0].fotos.costas, c, "", 'loading="lazy"')}
-              <span class="tile-name">${esc(c)}</span>
-              <span class="tile-meta">${pecas.length} ${pecas.length === 1 ? "peça" : "peças"} →</span>
-            </a>`;
-          }).join("")}
+      <section class="band">
+        <div class="container three-col">
+          ${pilares.map(([t, d], k) => `<div class="pilar"><p class="n">0${k + 1}</p><h2>${t}</h2><p>${d}</p></div>`).join("")}
         </div>
       </section>
-      <section class="banner">
-        <div class="container banner-inner">
-          <p class="eyebrow">Sobre a marca</p>
-          <h2 class="h2">Mais que uma marca.<br><span class="hl">Uma família sobre rodas.</span></h2>
-          <a href="/sobre" class="btn-outline">Conhecer a SK8FAMILY →</a>
-        </div>
-      </section>
-      <section class="container section center">
-        <p class="eyebrow">Atendimento direto</p>
-        <h2 class="h2">Precisa de uma força?</h2>
-        <p class="lead">Dúvida de tamanho, troca ou pedido: fala com a gente.</p>
-        <a href="/contato" class="btn-primary mt-10">Falar com a SK8FAMILY</a>
+      <section class="container section center familia">
+        <h2 class="h2">Bem-vindo à família</h2>
+        <p class="lead">Acompanha os drops, sessões e bastidores no nosso Instagram.</p>
+        ${INSTAGRAM ? `<a href="${esc(INSTAGRAM)}" target="_blank" rel="noopener" class="btn-primary">Seguir no Instagram</a>` : `<a href="/contato" class="btn-primary">Falar com a gente</a>`}
       </section>`;
 
     let i = 0;
@@ -300,15 +289,17 @@
     const pad = (x) => String(x).padStart(2, "0");
     const show = (n) => {
       i = (n + heroSlides.length) % heroSlides.length;
-      const s = heroSlides[i];
+      const sl = heroSlides[i];
       slides.forEach((el, k) => el.classList.toggle("on", k === i));
       dots.forEach((d, k) => d.classList.toggle("on", k === i));
       document.getElementById("hero-text").outerHTML = `
         <div id="hero-text" class="hero-text">
-          <p class="hero-kicker">Coleção ${pad(i + 1)}</p>
-          <h1>${esc(s.colecao)}</h1>
-          <p class="hero-tag">${esc(s.tagline)}</p>
-          <a href="/produtos/${s.slug}" class="btn-primary">Ver o drop <span aria-hidden="true">→</span></a>
+          <p class="tag">${esc(sl.etiqueta)}</p>
+          <h1><span>${esc(sl.titulo)}</span><span class="outline">${esc(sl.contorno)}</span></h1>
+          <div class="hero-btns">
+            <a href="${esc(sl.href)}" class="btn-primary">${esc(sl.botao)}</a>
+            ${INSTAGRAM ? `<a href="${esc(INSTAGRAM)}" target="_blank" rel="noopener" class="btn-outline">${esc(instaUser)}</a>` : ""}
+          </div>
         </div>`;
       document.getElementById("hero-num").innerHTML = `${pad(i + 1)}<span class="dim"> / ${pad(heroSlides.length)}</span>`;
     };
@@ -330,13 +321,13 @@
 
   function Colecoes() {
     app.innerHTML = `<div class="container page">
-      ${pageTitle("Coleções", "Os rolês da família", "Cada coleção nasce de um pico diferente. Escolha a sua.")}
+      ${pageTitle("Coleções", "Os drops da família", "Cada drop é pequeno e sem reposição. Quando acaba, acabou.")}
       <div class="colecoes">
         ${colecoes.map((c, k) => {
           const pecas = modelos.filter((m) => m.collection === c);
           const capa = pecas[0];
           return `<a href="${colecaoHref(c)}" class="colecao">
-            ${IMG(capa.fotos.costas, c, "cover")}
+            ${IMG(capa.fotos.frente, c, "cover")}
             <div class="fade"></div>
             <div class="colecao-inner">
               <p class="eyebrow light">0${k + 1} · ${pecas.length} ${pecas.length === 1 ? "peça" : "peças"}</p>
@@ -368,7 +359,7 @@
       (!colecao || m.collection === colecao) && (!tipo || m.tipo === tipo) &&
       (!termo || semAcento([m.name, m.code, m.collection, m.tipoNome, m.cor, m.tagline].join(" ")).includes(termo)));
     app.innerHTML = `<div class="container page">
-      ${pageTitle("Produtos", "Todas as peças", "Camisetas, moletons, calças e bonés. Toque em uma peça para ver todos os detalhes.")}
+      ${pageTitle("Drops", "Todas as peças", "Corte oversized, malha pesada e cara de asfalto. Toque em uma peça para ver os detalhes.")}
       <form class="busca" id="busca" role="search">
         <label class="sr-only" for="busca-input">Buscar peças</label>
         <input id="busca-input" name="busca" type="search" value="${esc(busca)}" placeholder="Buscar: moletom, preta, baggy…" autocomplete="off" />
@@ -404,7 +395,7 @@
     let size = null;
 
     app.innerHTML = `<div class="container page">
-      <nav class="crumbs"><a href="/produtos">Produtos</a> / <a href="${colecaoHref(m.collection)}">${esc(m.collection)}</a> / <span class="cur">${esc(m.name)}</span></nav>
+      <nav class="crumbs"><a href="/produtos">Drops</a> / <a href="${colecaoHref(m.collection)}">${esc(m.collection)}</a> / <span class="cur">${esc(m.name)}</span></nav>
       <div class="produto">
         <div class="gallery" aria-label="Fotos de ${esc(m.name)}">
           ${views.map(([src, label], k) => `<button class="${k === 0 ? "wide" : ""}" data-src="${src}" data-label="${label}" aria-label="Ampliar ${esc(m.name)} — ${label}">
@@ -437,7 +428,7 @@
         </div>
       </div>
       <section class="mt-28">
-        <p class="eyebrow">Você também pode gostar</p>
+        <h2 class="also">Você também pode gostar</h2>
         <div class="grid grid-3" style="margin-top:2rem">${outros.map(card).join("")}</div>
       </section>
     </div>`;
@@ -776,40 +767,37 @@
   }
 
   function Sobre() {
-    const pilares = [
-      ["Família", "Ninguém anda sozinho. A marca nasce da sessão entre amigos e continua assim."],
-      ["Rua", "Tudo é testado no chão: malha pesada, costura reforçada e modelagem larga para andar."],
-      ["Drops limitados", "Poucas peças por coleção. Quando acaba, a gente parte para a próxima."],
-    ];
     app.innerHTML = `
       <section class="sobre-hero">
-        <div class="hero-word" aria-hidden="true">FAMILY</div>
         <div class="container sobre-hero-inner">
-          <p class="eyebrow">Sobre a marca</p>
-          <h1>Mais que uma marca.<br><span class="hl">Uma família sobre rodas.</span></h1>
+          <p class="tag" style="align-self:flex-start">A família</p>
+          <h1><span>Feito na rua.</span><span class="outline">Pra rua.</span></h1>
         </div>
       </section>
       <section class="container section two-col">
-        <p class="quote">Skate, rua e quem anda junto.</p>
+        <p class="quote">Roupa de rua feita por skatista.</p>
         <div class="body">
-          <p>A SK8FAMILY é streetwear feito por quem vive o skate: do primeiro ollie na calçada à sessão que só acaba quando a luz da pista apaga.</p>
-          <p>Cada peça é pensada para o rolê. Tecido que aguenta queda, caimento largo e estampas com a cara da rua.</p>
+          <p>A SK8FAMILY nasce da sessão: do primeiro ollie na calçada ao rolê que só acaba quando a luz da pista apaga.</p>
+          <p>Cada drop é pequeno e sem reposição. Corte oversized, malha pesada e cara de asfalto.</p>
           ${OWNERS.length ? `<p>Por trás da marca estão ${OWNERS.map((o) => esc(o.name)).join(" e ")}, que atendem cada cliente pessoalmente.</p>` : ""}
         </div>
       </section>
       <section class="band">
         <div class="container three-col">
-          ${pilares.map(([t, d], k) => `<div class="pilar"><p class="n">0${k + 1}</p><h2>${t}</h2><p>${d}</p></div>`).join("")}
+          ${PILARES.map(([t, d], k) => `<div class="pilar"><p class="n">0${k + 1}</p><h2>${t}</h2><p>${d}</p></div>`).join("")}
         </div>
       </section>
-      <section class="section center"><a href="/produtos" class="btn-outline">Ver as peças →</a></section>`;
+      <section class="container section center familia">
+        <h2 class="h2">Bem-vindo à família</h2>
+        <a href="/produtos" class="btn-primary">Ver o drop</a>
+      </section>`;
   }
 
   function Contato() {
     const canais = [
       WHATSAPP_PEDIDOS ? [whatsLink(WHATSAPP_PEDIDOS, "Salve! Preciso de ajuda com a SK8FAMILY."), "WhatsApp", "Chamar no WhatsApp", "Abrir conversa →", true] : null,
       SUPPORT_EMAIL ? [`mailto:${SUPPORT_EMAIL}`, "E-mail de atendimento", SUPPORT_EMAIL, "Enviar e-mail →", false] : null,
-      INSTAGRAM ? [INSTAGRAM, "Instagram", "@" + INSTAGRAM.replace(/\/$/, "").split("/").pop(), "Ver perfil →", true] : null,
+      INSTAGRAM ? [INSTAGRAM, "Instagram", instaUser, "Chamar no direct →", true] : null,
     ].filter(Boolean);
     app.innerHTML = `<div class="container page">
       ${pageTitle("Contato", "Precisa de uma força?", "Dúvida de tamanho, troca ou pedido: fala com a gente.")}
@@ -838,7 +826,7 @@
   }
 
   /* ---------- Roteador (endereços normais, sem #) ---------- */
-  const TITLES = { "/": "SK8FAMILY — Streetwear de skate", "/colecoes": "Coleções — SK8FAMILY", "/produtos": "Produtos — SK8FAMILY", "/sacola": "Sacola — SK8FAMILY", "/favoritos": "Favoritos — SK8FAMILY", "/finalizar": "Finalizar pedido — SK8FAMILY", "/pedido-enviado": "Pedido enviado — SK8FAMILY", "/sobre": "Sobre a Marca — SK8FAMILY", "/contato": "Contato — SK8FAMILY" };
+  const TITLES = { "/": "SK8FAMILY — Feito na rua, pra rua", "/colecoes": "Coleções — SK8FAMILY", "/produtos": "Drops — SK8FAMILY", "/sacola": "Sacola — SK8FAMILY", "/favoritos": "Favoritos — SK8FAMILY", "/finalizar": "Finalizar pedido — SK8FAMILY", "/pedido-enviado": "Pedido enviado — SK8FAMILY", "/sobre": "A Família — SK8FAMILY", "/contato": "Contato — SK8FAMILY" };
   function router() {
     clearInterval(heroTimer);
     // Aceita links antigos com # (ex.: /#/produtos/monte-carlo)

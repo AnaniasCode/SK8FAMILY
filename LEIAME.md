@@ -11,17 +11,20 @@ Loja da SK8FAMILY em HTML, CSS e JavaScript puros, sem dependências.
 - `app.js`: as páginas (Início, Coleções, Produtos, Peça, Favoritos, Sacola, Finalizar, Sobre e Contato).
 - `build.mjs`: título, descrição e imagem de prévia (WhatsApp e Google) de cada página.
 - `assets/produtos/`: fotos das peças (3 por peça: frente, costas e conjunto).
+- `assets/logo.png`: logo do cabeçalho (preto, fundo transparente). `assets/logo-branco.png` é a versão clara.
 
 ## Antes de divulgar
 Em `catalog.js`, preencha:
 - `WHATSAPP_PEDIDOS`: número que recebe os pedidos (55 + DDD + número). Vazio, o pedido abre no WhatsApp sem destinatário.
-- `OWNERS`, `INSTAGRAM` e `SUPPORT_EMAIL`: aparecem na página da peça, no Contato e no rodapé (só os preenchidos).
+- `OWNERS` e `SUPPORT_EMAIL` (o `INSTAGRAM` já está preenchido): aparecem na página da peça, no Contato e no rodapé (só os preenchidos).
 - `FRETE` e `CUPONS` (modelo explicado no próprio arquivo).
 
 ## Trocar os mockups por fotos
 1. Salve as fotos em `assets/produtos/` como `peca_N_frente.jpg`, `peca_N_costas.jpg` e `peca_N_conjunto.jpg` (N é o primeiro número da peça em `catalog.js`).
 2. Em `catalog.js`, mude `EXT_FOTO` de `"svg"` para `"jpg"`.
 3. Para foto de fundo no carrossel da página inicial, preencha `img` em `heroSlides` (ex.: `"/assets/hero_1.jpg"`).
+
+As fotos aparecem em preto e branco no site (filtro no `styles.css`), mesmo que o arquivo seja colorido.
 
 Os mockups são gerados por `node ferramentas/gerar_mockups.mjs` a partir do catálogo.
 

@@ -11,13 +11,13 @@ const ctx = { window: {} };
 vm.runInNewContext(fs.readFileSync(path.join(ROOT, "catalog.js"), "utf8"), ctx);
 const { modelos } = ctx.window.SK8;
 
-const FUNDO = "#1c1c1c";
+const FUNDO = "#d9d7d2";
 const FONTE = "Impact, 'Arial Narrow', 'Arial Black', sans-serif";
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 
 // Contorno: mais claro em peça escura, mais escuro em peça clara.
 const lum = (hex) => { const n = parseInt(hex.slice(1), 16); return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255; };
-const traco = (hex) => (lum(hex) < 0.4 ? "rgba(255,255,255,.22)" : "rgba(0,0,0,.28)");
+const traco = (hex) => (lum(hex) < 0.4 ? "rgba(255,255,255,.3)" : "rgba(0,0,0,.4)");
 
 // Texto da estampa em linhas, centralizado em (x, y).
 function estampa(linhas, x, y, tamanho, cor) {
@@ -69,7 +69,7 @@ const PECAS = {
 
 const moldura = (conteudo) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600"><rect width="600" height="600" fill="${FUNDO}"/>${conteudo}` +
-  `<text transform="translate(588 584) rotate(-90)" font-family="monospace" font-size="13" letter-spacing="2" fill="rgba(255,255,255,.3)">MOCKUP · FOTO EM BREVE</text></svg>\n`;
+  `<text transform="translate(588 584) rotate(-90)" font-family="monospace" font-size="13" letter-spacing="2" fill="rgba(0,0,0,.35)">MOCKUP · FOTO EM BREVE</text></svg>\n`;
 
 fs.mkdirSync(OUT, { recursive: true });
 for (const m of modelos) {
