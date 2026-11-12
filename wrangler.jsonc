@@ -1,10 +1,11 @@
 // Configuração da publicação na Cloudflare (Workers com arquivos estáticos).
-// A Cloudflare roda "node build.mjs" e publica a pasta dist/.
+// A Cloudflare roda o build e publica a pasta dist/.
+// SITE_URL é o endereço público do site (usado na prévia de links); troque aqui se o endereço mudar.
 {
   "name": "sk8family",
   "compatibility_date": "2026-01-01",
   "workers_dev": true,
-  "build": { "command": "node build.mjs" },
+  "build": { "command": "SITE_URL=https://sk8family.nacional-oficial.workers.dev node build.mjs" },
   "assets": {
     "directory": "./dist",
     "html_handling": "auto-trailing-slash",
