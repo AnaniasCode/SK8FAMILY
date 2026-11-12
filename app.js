@@ -247,6 +247,7 @@
 
   /* ---------- Páginas ---------- */
   let heroTimer = null;
+  const HERO_SEGUNDOS = 4; // tempo de cada slide do carrossel da página inicial
 
   function Home() {
     const faixa = Array(8).fill(`<span>${esc(colecoes[0])} · Peças limitadas · Pedido pelo WhatsApp<i>✦</i></span>`).join("");
@@ -303,7 +304,7 @@
         </div>`;
       document.getElementById("hero-num").innerHTML = `${pad(i + 1)}<span class="dim"> / ${pad(heroSlides.length)}</span>`;
     };
-    const restart = () => { clearInterval(heroTimer); heroTimer = setInterval(() => show(i + 1), 6000); };
+    const restart = () => { clearInterval(heroTimer); heroTimer = setInterval(() => show(i + 1), HERO_SEGUNDOS * 1000); };
     dots.forEach((d) => d.addEventListener("click", () => { show(+d.dataset.k); restart(); }));
     app.querySelector(".hero-arrow.prev").addEventListener("click", () => { show(i - 1); restart(); });
     app.querySelector(".hero-arrow.next").addEventListener("click", () => { show(i + 1); restart(); });
