@@ -43,6 +43,9 @@ python3 -m http.server 8000 -d dist
 Depois abra http://localhost:8000.
 
 ## Publicar
-`node build.mjs` cria a pasta `dist/`, que é um site estático comum e funciona em qualquer hospedagem
-(comando de build: `node build.mjs`, pasta publicada: `dist`). Nenhuma hospedagem está configurada ainda.
+O site é publicado pela Cloudflare (projeto Workers `sk8family`, ligado a este repositório):
+a cada mudança enviada ao GitHub, ela roda `node build.mjs` e publica a pasta `dist/`.
+A configuração está em `wrangler.jsonc`.
+
+A pasta `dist/` é um site estático comum e também funciona em qualquer outra hospedagem.
 Para as prévias de link saírem com o endereço certo, gere com `SITE_URL=https://seu-dominio node build.mjs`.
