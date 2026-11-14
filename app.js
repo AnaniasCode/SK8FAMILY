@@ -1,5 +1,5 @@
 (function () {
-  const { MARCA, WHATSAPP_PEDIDOS, FRETE, CUPONS, OWNERS, INSTAGRAM, SUPPORT_EMAIL, modelos, colecoes, tipos, heroSlides, whatsLink } = window.SK8;
+  const { MARCA, WHATSAPP_PEDIDOS, FRETE, CUPONS, OWNERS, INSTAGRAM, SUPPORT_EMAIL, modelos, colecoes, tipos, heroSlides, DROP, DESTAQUES, whatsLink } = window.SK8;
   const app = document.getElementById("app");
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
@@ -94,12 +94,15 @@
   document.getElementById("footer-marquee").innerHTML = Array(12).fill("<span>Feito na rua, pra rua<i>✦</i></span>").join("");
   document.getElementById("ano").textContent = new Date().getFullYear();
 
+  // Como a peça fica gravada na sacola: "M" ou, quando tem cor, "M · Amarela"
+  const variante = (size, cor) => (cor ? `${size} · ${cor}` : size);
+
   /* ---------- Componentes ---------- */
   const card = (m) => {
     const fav = isFav(m.code);
-    const slides = [[m.fotos.frente, "Frente"], [m.fotos.costas, "Costas"]];
+    const slides = m.fotos.map((src, k) => [src, `foto ${k + 1}`]);
     return `
-    <article class="card" data-code="${m.code}">
+    <article class="card ${slides.length < 2 ? "single" : ""}" data-code="${m.code}">
       <div class="card-media">
         <a href="/produtos/${m.slug}" class="card-track" tabindex="-1" aria-hidden="true" draggable="false">
           ${slides.map(([src, label]) => IMG(src, `${m.name} — ${label}`, "", 'loading="lazy" draggable="false"')).join("")}
@@ -111,6 +114,8 @@
         <div class="card-dots" aria-hidden="true">${slides.map((_, k) => `<span class="${k ? "" : "on"}"></span>`).join("")}</div>
         <button class="card-quick" aria-label="Escolher tamanho de ${esc(m.name)}" aria-expanded="false">${icon("bag")}</button>
         <div class="card-panel">
+          ${m.cores ? `<p class="card-panel-title">Escolha a cor</p>
+          <div class="card-sizes card-cores" style="--n:${m.cores.length}">${m.cores.map((c) => `<button class="card-cor" data-cor="${esc(c)}" aria-pressed="false">${esc(c)}</button>`).join("")}</div>` : ""}
           <p class="card-panel-title">Escolha o tamanho</p>
           <div class="card-sizes" style="--n:${m.tamanhos.length}">${m.tamanhos.map((t) => `<button class="card-size" data-size="${t}" aria-pressed="false">${t}</button>`).join("")}</div>
           <button class="card-add">Adicionar à sacola</button>
@@ -144,8 +149,8 @@
   // depois de 30 segundos sem nenhum tamanho escolhido.
   const PANEL_TIMEOUT = 30000;
   const clearSize = (c) => {
-    delete c.dataset.size;
-    c.querySelectorAll(".card-size").forEach((b) => { b.classList.remove("on"); b.setAttribute("aria-pressed", "false"); });
+    delete c.dataset.size; delete c.dataset.cor;
+    c.querySelectorAll(".card-size, .card-cor").forEach((b) => { b.classList.remove("on"); b.setAttribute("aria-pressed", "false"); });
   };
   const armTimer = (c) => {
     clearTimeout(c._panelTimer);
@@ -226,9 +231,14 @@
       c.querySelectorAll(".card-size").forEach((b) => { const on = !unselect && b === btn; b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); });
       if (unselect) delete c.dataset.size; else c.dataset.size = btn.dataset.size;
       armTimer(c);
+    } else if (btn.classList.contains("card-cor")) {
+      c.querySelectorAll(".card-cor").forEach((b) => { const on = b === btn; b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); });
+      c.dataset.cor = btn.dataset.cor;
+      armTimer(c);
     } else if (btn.classList.contains("card-add")) {
-      const size = c.dataset.size;
-      if (!size) { toast("Escolha um tamanho primeiro"); return; }
+      if (m.cores && !c.dataset.cor) { toast("Escolha uma cor primeiro"); return; }
+      if (!c.dataset.size) { toast("Escolha um tamanho primeiro"); return; }
+      const size = variante(c.dataset.size, c.dataset.cor);
       addBag(m.code, size);
       toast(`${m.name} · ${size} foi para a sacola`, { label: "Ver sacola", href: "/sacola" });
       setOpen(c, false);
@@ -250,14 +260,13 @@
   const HERO_SEGUNDOS = 4; // tempo de cada slide do carrossel da página inicial
 
   function Home() {
-    const faixa = Array(8).fill(`<span>${esc(colecoes[0])} · Peças limitadas · Pedido pelo WhatsApp<i>✦</i></span>`).join("");
-    const destaque = (sl) => modelos.find((m) => m.slug === sl.slug) || modelos[0];
-    const drop = modelos.filter((m) => m.collection === colecoes[0]);
+    const faixa = Array(8).fill(`<span>${esc(DROP)} · Peças limitadas · Pedido pelo WhatsApp<i>✦</i></span>`).join("");
+    const drop = DESTAQUES.map((slug) => modelos.find((m) => m.slug === slug)).filter(Boolean);
     const pilares = PILARES;
     app.innerHTML = `
       <section class="hero" aria-roledescription="carrossel" aria-label="Destaques">
         ${heroSlides.map((sl, k) => `<div class="hero-slide ${k === 0 ? "on" : ""}" data-k="${k}">
-          ${sl.img ? `<img src="${esc(sl.img)}" alt="" class="cover" style="object-position:${esc(sl.pos || "center")}" ${k ? 'loading="lazy"' : ""}><div class="fade"></div>` : `<div class="hero-piece">${IMG(destaque(sl).fotos.frente, destaque(sl).name)}</div>`}
+          ${sl.img ? `<img src="${esc(sl.img)}" alt="" class="cover" style="object-position:${esc(sl.pos || "center")}" ${k ? 'loading="lazy"' : ""}><div class="fade"></div>` : ""}
         </div>`).join("")}
         <div class="hero-content"><div id="hero-text"></div></div>
         <button class="hero-arrow prev" aria-label="Slide anterior">${icon("left")}</button>
@@ -268,7 +277,7 @@
       <div class="marquee" aria-hidden="true"><div class="marquee-track">${faixa}</div></div>
       <section class="container section">
         <div class="section-head">
-          <h2 class="h2">${esc(colecoes[0])}</h2>
+          <h2 class="h2">${esc(DROP)}</h2>
           <div class="side"><p>Corte oversized, malha pesada e cara de asfalto. Quando acaba, acabou.</p><a href="/produtos" class="link-underline">Ver todas as peças →</a></div>
         </div>
         <div class="grid">${drop.map(card).join("")}</div>
@@ -322,13 +331,13 @@
 
   function Colecoes() {
     app.innerHTML = `<div class="container page">
-      ${pageTitle("Coleções", "Os drops da família", "Cada drop é pequeno e sem reposição. Quando acaba, acabou.")}
+      ${pageTitle("Coleções", "As linhas da família", "Três linhas, uma família. Peças limitadas: quando acaba, acabou.")}
       <div class="colecoes">
         ${colecoes.map((c, k) => {
           const pecas = modelos.filter((m) => m.collection === c);
           const capa = pecas[0];
           return `<a href="${colecaoHref(c)}" class="colecao">
-            ${IMG(capa.fotos.frente, c, "cover")}
+            ${IMG(capa.img, c, "cover")}
             <div class="fade"></div>
             <div class="colecao-inner">
               <p class="eyebrow light">0${k + 1} · ${pecas.length} ${pecas.length === 1 ? "peça" : "peças"}</p>
@@ -360,7 +369,7 @@
       (!colecao || m.collection === colecao) && (!tipo || m.tipo === tipo) &&
       (!termo || semAcento([m.name, m.code, m.collection, m.tipoNome, m.cor, m.tagline].join(" ")).includes(termo)));
     app.innerHTML = `<div class="container page">
-      ${pageTitle("Drops", "Todas as peças", "Corte oversized, malha pesada e cara de asfalto. Toque em uma peça para ver os detalhes.")}
+      ${pageTitle("Drops", "Todas as peças", "Camisetas, polos, moletons, calças, bermuda e boné. Toque em uma peça para ver os detalhes.")}
       <form class="busca" id="busca" role="search">
         <label class="sr-only" for="busca-input">Buscar peças</label>
         <input id="busca-input" name="busca" type="search" value="${esc(busca)}" placeholder="Buscar: moletom, preta, baggy…" autocomplete="off" />
@@ -368,7 +377,7 @@
       </form>
       <div class="chips" aria-label="Filtrar por tipo">
         <a href="${href({ tipo: "" })}" class="chip ${!tipo ? "on" : ""}">Tudo</a>
-        ${tipos.map((t) => `<a href="${href({ tipo: t.id })}" class="chip ${tipo === t.id ? "on" : ""}">${esc(t.nome)}s</a>`).join("")}
+        ${tipos.map((t) => `<a href="${href({ tipo: t.id })}" class="chip ${tipo === t.id ? "on" : ""}">${esc(t.nome)}</a>`).join("")}
       </div>
       <div class="chips chips-2" aria-label="Filtrar por coleção">
         <a href="${href({ colecao: "" })}" class="chip ${!colecao ? "on" : ""}">Todas as coleções</a>
@@ -392,13 +401,13 @@
     if (!m) return NotFound("Peça não encontrada", "/produtos", "Ver as peças");
     document.title = `${m.name} — SK8FAMILY`;
     const outros = [...modelos.filter((x) => x.slug !== slug && x.collection === m.collection), ...modelos.filter((x) => x.slug !== slug && x.collection !== m.collection)].slice(0, 3);
-    const views = [[m.fotos.frente, "Frente"], [m.fotos.costas, "Costas"], [m.fotos.conjunto, "Frente e verso"]];
-    let size = null;
+    const views = m.fotos.map((src, k) => [src, `foto ${k + 1}`]);
+    let size = null, cor = null;
 
     app.innerHTML = `<div class="container page">
       <nav class="crumbs"><a href="/produtos">Drops</a> / <a href="${colecaoHref(m.collection)}">${esc(m.collection)}</a> / <span class="cur">${esc(m.name)}</span></nav>
       <div class="produto">
-        <div class="gallery" aria-label="Fotos de ${esc(m.name)}">
+        <div class="gallery ${views.length === 2 ? "duas" : ""}" aria-label="Fotos de ${esc(m.name)}">
           ${views.map(([src, label], k) => `<button class="${k === 0 ? "wide" : ""}" data-src="${src}" data-label="${label}" aria-label="Ampliar ${esc(m.name)} — ${label}">
             ${IMG(src, `${m.name} — ${label}`, "", k ? 'loading="lazy"' : "")}<span class="zoom">${icon("zoom")}</span></button>`).join("")}
         </div>
@@ -408,24 +417,20 @@
           <p class="p-tag">${esc(m.tagline)}</p>
           <p class="p-price">${m.preco}</p>
           <p class="p-desc">${esc(m.descricao)}</p>
+          ${m.cores ? `<div class="mt-8">
+            <p class="eyebrow mb-3">Cor <span id="cor-label" style="color:var(--foreground)"></span></p>
+            <div class="sizes">${m.cores.map((c) => `<button class="size cor" data-cor="${esc(c)}">${esc(c)}</button>`).join("")}</div>
+          </div>` : ""}
           <div class="mt-8">
             <p class="eyebrow mb-3">Tamanho <span id="size-label" style="color:var(--foreground)"></span></p>
-            <div class="sizes">${m.tamanhos.map((t) => `<button class="size" data-size="${t}">${t}</button>`).join("")}</div>
+            <div class="sizes">${m.tamanhos.map((t) => `<button class="size tam" data-size="${t}">${t}</button>`).join("")}</div>
           </div>
           <div class="buy-row"><button class="btn-block" id="add-bag">Adicionar à sacola</button><button class="fav-big ${isFav(m.code) ? "on" : ""}" id="fav-big" aria-pressed="${isFav(m.code)}" aria-label="Favoritar ${esc(m.name)}">${icon("heart")}</button></div>
           <div class="wa-grid" id="wa-grid"></div>
           <dl class="specs">
             <div class="spec"><dt class="eyebrow">Cor</dt><dd>${esc(m.cor)}</dd></div>
             <div class="spec"><dt class="eyebrow">Arte</dt><dd>${esc(m.estampa)}</dd></div>
-            <div class="spec"><dt class="eyebrow">Tecido</dt><dd>${esc(m.tecido)}</dd></div>
           </dl>
-          <div class="mt-10">
-            <p class="eyebrow mb-3">Tabela de medidas</p>
-            <table class="medidas">
-              <thead><tr><th class="eyebrow">Tamanho</th>${m.medidas.colunas.map((c) => `<th class="eyebrow">${c}</th>`).join("")}</tr></thead>
-              <tbody>${m.medidas.linhas.map((l) => `<tr>${l.map((v) => `<td>${v}</td>`).join("")}</tr>`).join("")}</tbody>
-            </table>
-          </div>
         </div>
       </div>
       <section class="mt-28">
@@ -435,20 +440,28 @@
     </div>`;
 
     const renderWa = () => {
-      const msg = `Olá! Tenho interesse na peça ${m.name} (${m.code})${size ? `, tamanho ${size}` : ""}.`;
+      const msg = `Olá! Tenho interesse na peça ${m.name} (${m.code})${cor ? `, cor ${cor}` : ""}${size ? `, tamanho ${size}` : ""}.`;
       document.getElementById("wa-grid").innerHTML = OWNERS.filter((o) => o.phone).map((o) => `<a href="${whatsLink(o.phone, msg)}" target="_blank" rel="noopener">WhatsApp ${o.name}</a>`).join("");
     };
     renderWa();
-    app.querySelectorAll(".size").forEach((b) => b.addEventListener("click", () => {
+    app.querySelectorAll(".size.cor").forEach((b) => b.addEventListener("click", () => {
+      cor = b.dataset.cor;
+      app.querySelectorAll(".size.cor").forEach((x) => x.classList.toggle("on", x === b));
+      document.getElementById("cor-label").textContent = `· ${cor}`;
+      renderWa();
+    }));
+    app.querySelectorAll(".size.tam").forEach((b) => b.addEventListener("click", () => {
       size = b.dataset.size;
-      app.querySelectorAll(".size").forEach((x) => x.classList.toggle("on", x === b));
+      app.querySelectorAll(".size.tam").forEach((x) => x.classList.toggle("on", x === b));
       document.getElementById("size-label").textContent = `· ${size}`;
       renderWa();
     }));
     document.getElementById("add-bag").addEventListener("click", () => {
+      if (m.cores && !cor) return toast("Escolha uma cor primeiro");
       if (!size) return toast("Escolha um tamanho primeiro");
-      addBag(m.code, size);
-      toast(`${m.name} · ${size} foi para a sacola`, { label: "Ver sacola", href: "/sacola" });
+      const v = variante(size, cor);
+      addBag(m.code, v);
+      toast(`${m.name} · ${v} foi para a sacola`, { label: "Ver sacola", href: "/sacola" });
     });
     const favBig = document.getElementById("fav-big");
     favBig.addEventListener("click", () => {
@@ -457,7 +470,7 @@
       document.querySelectorAll(`.card[data-code="${m.code}"] .card-fav`).forEach((b) => { b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); });
       toast(on ? `${m.name} foi para os favoritos` : `${m.name} saiu dos favoritos`, on ? { label: "Ver favoritos", href: "/favoritos" } : null);
     });
-    if (m.tamanhos.length === 1) app.querySelector(".size").click();
+    if (m.tamanhos.length === 1) app.querySelector(".size.tam").click();
     app.querySelectorAll(".gallery button").forEach((b) => b.addEventListener("click", () => openLightbox(b.dataset.src, `${m.name} — ${b.dataset.label}`)));
   }
 

@@ -28,7 +28,7 @@ const pages = [
     ogTitle: "SK8FAMILY — Feito na rua, pra rua", ogDesc: "Roupa de rua feita por skatista. Peças limitadas por drop." },
   { url: "/colecoes", title: "Coleções — SK8FAMILY", desc: `As coleções da SK8FAMILY: ${colecoes.join(", ")}.`,
     ogDesc: "Drops pequenos e sem reposição." },
-  { url: "/produtos", title: "Drops — SK8FAMILY", desc: "Todas as peças da SK8FAMILY: camisetas, moletons, calças e bonés, com preço, tamanhos e tabela de medidas." },
+  { url: "/produtos", title: "Drops — SK8FAMILY", desc: "Todas as peças da SK8FAMILY: camisetas, polos, moletons, calças, bermuda e boné, com preço e tamanhos." },
   { url: "/sobre", title: "A Família — SK8FAMILY", desc: "A história da SK8FAMILY: skate, rua e quem anda junto.", ogDesc: "Feito na rua, pra rua." },
   { url: "/contato", title: "Contato — SK8FAMILY", desc: "Dúvida de tamanho, troca ou pedido: fale com a SK8FAMILY." },
   { url: "/favoritos", title: "Favoritos — SK8FAMILY", desc: "Suas peças favoritas da SK8FAMILY.", noindex: true },

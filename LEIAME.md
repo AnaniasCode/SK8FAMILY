@@ -2,16 +2,15 @@
 
 Loja da SK8FAMILY em HTML, CSS e JavaScript puros, sem dependências.
 
-> As peças, os preços e os textos atuais são **exemplos**, e as fotos das peças são **mockups** (desenhos).
-> As fotos do carrossel (`assets/hero_1.jpg` a `hero_5.jpg`) vieram do Instagram da marca.
-> Troque pelos dados e fotos reais antes de divulgar.
+> As fotos das peças e do carrossel vieram da marca (WhatsApp e Instagram). Os textos de descrição foram
+> escritos a partir das fotos; confira antes de divulgar.
 
 ## Onde editar
-- `catalog.js`: produtos, preços, descrições, tamanhos, tabela de medidas, WhatsApp, Instagram, e-mail, frete, cupons e slides da página inicial.
+- `catalog.js`: produtos, preços (um por tipo de peça, em `TIPOS`), descrições, tamanhos, cores, WhatsApp, Instagram, e-mail, frete, cupons, destaques e slides da página inicial.
 - `styles.css`: cores e fontes (no topo, em `:root`).
 - `app.js`: as páginas (Início, Coleções, Produtos, Peça, Favoritos, Sacola, Finalizar, Sobre e Contato).
 - `build.mjs`: título, descrição e imagem de prévia (WhatsApp e Google) de cada página.
-- `assets/produtos/`: fotos das peças (3 por peça: frente, costas e conjunto).
+- `assets/produtos/`: fotos das peças, na proporção 4:5 (ex.: 1080×1350), com os nomes `peca_N_1.jpg`, `peca_N_2.jpg`...
 - `assets/logo.png`: logo do cabeçalho (preto, fundo transparente). `assets/logo-branco.png` é a versão clara.
 
 ## Antes de divulgar
@@ -20,14 +19,11 @@ Em `catalog.js`, preencha:
 - `OWNERS` e `SUPPORT_EMAIL` (o `INSTAGRAM` já está preenchido): aparecem na página da peça, no Contato e no rodapé (só os preenchidos).
 - `FRETE` e `CUPONS` (modelo explicado no próprio arquivo).
 
-## Trocar os mockups por fotos
-1. Salve as fotos em `assets/produtos/` como `peca_N_frente.jpg`, `peca_N_costas.jpg` e `peca_N_conjunto.jpg` (N é o primeiro número da peça em `catalog.js`).
-2. Em `catalog.js`, mude `EXT_FOTO` de `"svg"` para `"jpg"`.
-3. Para trocar as fotos do carrossel da página inicial, substitua `assets/hero_N.jpg` ou edite `heroSlides` (`img` é a foto e `pos` a parte dela que fica à mostra).
-
-As fotos aparecem em preto e branco no site (filtro no `styles.css`), mesmo que o arquivo seja colorido.
-
-Os mockups são gerados por `node ferramentas/gerar_mockups.mjs` a partir do catálogo.
+## Adicionar ou trocar fotos e peças
+1. Salve as fotos em `assets/produtos/` como `peca_N_1.jpg`, `peca_N_2.jpg`... (N é o número `n` da peça em `catalog.js`).
+2. Em `catalog.js`, ajuste `fotos` (quantas fotos a peça tem). Para uma peça nova, copie um bloco da lista e mude os dados.
+3. Peça com mais de uma cor: use `cores: ["Preta", "Amarela"]` no lugar de `cor`; o cliente escolhe a cor antes de comprar.
+4. Carrossel da página inicial: substitua `assets/hero_N.jpg` ou edite `heroSlides` (`img` é a foto e `pos` a parte dela que fica à mostra). Essas fotos aparecem em preto e branco; as das peças aparecem coloridas.
 
 ## Pedidos pelo site
 Sacola → `/finalizar` (nome, telefone, endereço com busca de CEP, forma de pagamento) →

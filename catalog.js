@@ -1,6 +1,4 @@
 // Dados da loja: edite aqui produtos, preços, contatos e slides.
-// ATENÇÃO: as peças, preços e contatos abaixo são EXEMPLOS para montar o site.
-// Troque pelos dados reais da SK8FAMILY antes de divulgar.
 window.SK8 = (function () {
   const MARCA = "SK8FAMILY";
 
@@ -28,114 +26,126 @@ window.SK8 = (function () {
   const CUPONS = [
   ];
 
-  // ---------- Tipos de peça: tamanhos, tecido e tabela de medidas ----------
+  // ---------- Tipos de peça: preço e tamanhos ----------
+  // O preço vale para todas as peças do tipo. Para mudar, edite só aqui.
+  const P_AO_GG = ["P", "M", "G", "GG"];
   const TIPOS = {
-    camiseta: {
-      nome: "Camiseta", tamanhos: ["P", "M", "G", "GG"], tecido: "100% algodão, malha pesada",
-      medidas: { colunas: ["Comprimento", "Largura"], linhas: [["P", "70 cm", "54 cm"], ["M", "73 cm", "57 cm"], ["G", "76 cm", "60 cm"], ["GG", "79 cm", "63 cm"]] },
-    },
-    moletom: {
-      nome: "Moletom", tamanhos: ["P", "M", "G", "GG"], tecido: "Moletom flanelado, 3 cabos",
-      medidas: { colunas: ["Comprimento", "Largura"], linhas: [["P", "66 cm", "58 cm"], ["M", "69 cm", "61 cm"], ["G", "72 cm", "64 cm"], ["GG", "75 cm", "67 cm"]] },
-    },
-    calca: {
-      nome: "Calça", tamanhos: ["38", "40", "42", "44", "46"], tecido: "Sarja 100% algodão",
-      medidas: { colunas: ["Cintura", "Comprimento"], linhas: [["38", "76 cm", "102 cm"], ["40", "80 cm", "104 cm"], ["42", "84 cm", "106 cm"], ["44", "88 cm", "108 cm"], ["46", "92 cm", "110 cm"]] },
-    },
-    bone: {
-      nome: "Boné", tamanhos: ["Único"], tecido: "Sarja com regulador",
-      medidas: { colunas: ["Circunferência"], linhas: [["Único", "55 a 60 cm (ajustável)"]] },
-    },
+    camiseta: { nome: "Camiseta", plural: "Camisetas", preco: 100, tamanhos: P_AO_GG },
+    polo: { nome: "Polo", plural: "Polos", preco: 130, tamanhos: P_AO_GG },
+    moletom: { nome: "Moletom", plural: "Moletons", preco: 280, tamanhos: P_AO_GG },
+    "calca-tactel": { nome: "Calça tactel", plural: "Calças tactel", preco: 160, tamanhos: P_AO_GG },
+    "calca-jeans": { nome: "Calça jeans balão", plural: "Calças jeans", preco: 180, tamanhos: ["38", "40", "42", "44", "46"] },
+    bermuda: { nome: "Bermuda", plural: "Bermudas", preco: 120, tamanhos: P_AO_GG },
+    bone: { nome: "Boné", plural: "Bonés", preco: 150, tamanhos: ["Único"] },
   };
 
-  // Fotos: coloque os arquivos em assets/produtos/ com estes nomes:
-  //   peca_N_frente, peca_N_costas e peca_N_conjunto (hoje são mockups .svg gerados por
-  //   ferramentas/gerar_mockups.mjs; ao trocar por foto .jpg, mude EXT_FOTO para "jpg").
-  const EXT_FOTO = "svg";
-  const fotos = (n) => ({
-    frente: `/assets/produtos/peca_${n}_frente.${EXT_FOTO}`,
-    costas: `/assets/produtos/peca_${n}_costas.${EXT_FOTO}`,
-    conjunto: `/assets/produtos/peca_${n}_conjunto.${EXT_FOTO}`,
-  });
+  // Fotos: ficam em assets/produtos/ como peca_N_1.jpg, peca_N_2.jpg... (N = número da peça).
+  // A primeira é a capa do card; as outras entram no carrossel do card e na página da peça.
+  const fotos = (n, qtd) => Array.from({ length: qtd }, (_, k) => `/assets/produtos/peca_${n}_${k + 1}.jpg`);
 
-  // [nº da foto, código, endereço, nome, tipo, coleção, frase curta, descrição, cor, arte, preço, selo (opcional)]
-  // "mock" (último campo) só serve para desenhar o mockup: cor da peça, cor da estampa e texto.
+  // Cada peça:
+  //   n: número (usado no nome das fotos e na etiqueta "Nº 01") · fotos: quantas fotos tem
+  //   cores (opcional): quando a peça tem mais de uma cor, o cliente escolhe antes de comprar
+  //   selo (opcional): texto ao lado do número na etiqueta do card, ex.: "Novo"
   const raw = [
-    [1, "SK-001", "camiseta-oversized-family", "Camiseta Oversized Family", "camiseta", "Drop 01",
-      "Corte oversized, malha pesada.",
-      "Camiseta oversized de malha pesada, com o logo SK8FAMILY nas costas e a etiqueta no peito. Modelagem larga, do jeito que a sessão pede.",
-      "Preto", "Costas: logo SK8FAMILY em off-white", "R$ 119,90", "Limitado",
-      { peca: "#161616", tinta: "#f1ede2", texto: ["SK8", "FAMILY"] }],
-    [2, "SK-002", "family-og-off", "Family OG Tee — Off White", "camiseta", "Family Classics",
-      "A clássica da família, na versão clara.",
-      "A mesma modelagem larga da OG, em off-white com estampa preta. Combina com tudo e aguenta o rolê.",
-      "Off-white", "Costas: logo SK8FAMILY em preto", "R$ 119,90", "",
-      { peca: "#ece7da", tinta: "#141414", texto: ["SK8", "FAMILY"] }],
-    [3, "SK-003", "no-comply", "No Comply Tee", "camiseta", "Family Classics",
-      "Para quem não segue regra de ninguém.",
-      "Lettering No Comply em off-white nas costas, sobre preto. No peito, o selo da família.",
-      "Preto com arte off-white", "Costas: lettering No Comply", "R$ 129,90", "Limitado",
-      { peca: "#161616", tinta: "#f6f5f3", texto: ["NO", "COMPLY"] }],
-    [4, "SK-004", "concrete-waves", "Concrete Waves Tee", "camiseta", "Bowl Riders",
-      "O surf é no concreto.",
-      "Arte Concrete Waves em off-white nas costas, numa camiseta cinza-asfalto. Feita para o bowl.",
-      "Cinza-asfalto", "Costas: arte Concrete Waves em off-white", "R$ 129,90", "",
-      { peca: "#55555a", tinta: "#f6f5f3", texto: ["CONCRETE", "WAVES"] }],
-    [5, "SK-005", "moletom-pesado-drop-01", "Moletom Pesado Drop 01", "moletom", "Drop 01",
-      "Capuz, bolso canguru e a rua inteira pela frente.",
-      "Moletom canguru pesado, flanelado, com capuz forrado e a estampa do Drop 01 nas costas. Quente e largo.",
-      "Preto", "Costas: estampa Drop 01 em off-white", "R$ 249,90", "Limitado",
-      { peca: "#161616", tinta: "#f1ede2", texto: ["DROP", "01"] }],
-    [6, "SK-006", "bowl-riders-hoodie", "Bowl Riders Hoodie", "moletom", "Bowl Riders",
-      "Para as sessões que entram pela noite.",
-      "Moletom canguru grafite com a arte Bowl Riders em off-white nas costas. Punho e barra em ribana.",
-      "Grafite", "Costas: Bowl Riders em off-white", "R$ 259,90", "",
-      { peca: "#3d3d3d", tinta: "#f6f5f3", texto: ["BOWL", "RIDERS"] }],
-    [7, "SK-007", "calca-cargo-sarja", "Calça Cargo Sarja", "calca", "Drop 01",
-      "Bolso cargo e sarja que aguenta queda.",
-      "Calça cargo de sarja com bolsos laterais, cós ajustável e etiqueta SK8FAMILY. Liberdade total de movimento.",
-      "Preto", "Etiqueta SK8FAMILY no bolso", "R$ 219,90", "",
-      { peca: "#161616", tinta: "#f6f5f3", texto: ["SK8"] }],
-    [8, "SK-008", "calca-baggy-caqui", "Calça Baggy Family — Cáqui", "calca", "Family Classics",
-      "A baggy da família em cáqui.",
-      "Modelagem baggy em sarja cáqui. Resistente para a pista, limpa para o dia a dia.",
-      "Cáqui", "Etiqueta SK8FAMILY no bolso", "R$ 219,90", "",
-      { peca: "#8f8d88", tinta: "#141414", texto: ["SK8"] }],
-    [9, "SK-009", "bone-five-panel", "Boné Five Panel SK8", "bone", "Family Classics",
-      "Aba reta, cinco gomos, um logo.",
-      "Boné five panel de sarja com regulador e o logo SK8 bordado na frente.",
-      "Preto", "Frente: logo SK8 bordado", "R$ 99,90", "",
-      { peca: "#161616", tinta: "#f6f5f3", texto: ["SK8"] }],
-    [10, "SK-010", "bone-dad-hat", "Boné Dad Hat Family", "bone", "Family Classics",
-      "Aba curva e bordado discreto.",
-      "Dad hat off-white com o bordado Family em preto e fecho regulável.",
-      "Off-white", "Frente: bordado Family", "R$ 99,90", "",
-      { peca: "#ece7da", tinta: "#141414", texto: ["FAMILY"] }],
+    { n: 1, fotos: 1, slug: "camiseta-drip-branca", name: "Camiseta Drip — Branca", tipo: "camiseta", colecao: "Logo",
+      tagline: "O logo escorrido, grande nas costas.",
+      descricao: "Camiseta branca com o logo SK8FAMILY em estilo grafite escorrido nas costas e a versão pequena no peito.",
+      cor: "Branca", estampa: "Costas: logo grafite preto · Peito: logo pequeno" },
+    { n: 2, fotos: 1, slug: "camiseta-drip-preta", name: "Camiseta Drip — Preta", tipo: "camiseta", colecao: "Logo",
+      tagline: "Preto no branco, tinta escorrendo.",
+      descricao: "Camiseta preta com o logo SK8FAMILY em caixa escorrida, estampado em branco.",
+      cor: "Preta", estampa: "Logo em caixa escorrida, branco" },
+    { n: 3, fotos: 2, slug: "camiseta-racing", name: "Camiseta Racing — Branca", tipo: "camiseta", colecao: "Logo",
+      tagline: "O logo de pista em azul, vermelho e preto.",
+      descricao: "Camiseta branca com o logo SK8FAMILY em estilo racing, em azul, vermelho e preto, no peito.",
+      cor: "Branca", estampa: "Peito: logo racing colorido" },
+    { n: 4, fotos: 2, slug: "camiseta-original-das-ruas", name: "Camiseta Original das Ruas — Preta", tipo: "camiseta", colecao: "Original das Ruas",
+      tagline: "Original das ruas, estampado nas costas.",
+      descricao: "Camiseta preta com o lettering SK8 Family Original das Ruas em branco, nas costas.",
+      cor: "Preta", estampa: "Costas: lettering Original das Ruas" },
+    { n: 5, fotos: 2, slug: "camiseta-yin-yang", name: "Camiseta Yin Yang — Preta", tipo: "camiseta", colecao: "Original das Ruas",
+      tagline: "Equilíbrio em cima do shape.",
+      descricao: "Camiseta preta com a arte yin yang grande nas costas e a assinatura Original das Ruas.",
+      cor: "Preta", estampa: "Costas: arte yin yang em branco" },
+    { n: 6, fotos: 1, slug: "camiseta-bordada-roxa", name: "Camiseta Bordada — Roxa", tipo: "camiseta", colecao: "Original das Ruas",
+      tagline: "A assinatura da família, bordada.",
+      descricao: "Camiseta roxa com a assinatura SK8FAMILY e a frase Original das Ruas em preto.",
+      cor: "Roxa", estampa: "Peito: assinatura e Original das Ruas" },
+    { n: 7, fotos: 2, slug: "camiseta-brasil", name: "Camiseta Brasil", tipo: "camiseta", colecao: "Brasil",
+      tagline: "O escudo da família com cinco estrelas.",
+      descricao: "Camiseta com a assinatura SK8FAMILY e o escudo Brasil na frente, e o logo grande nas costas.",
+      cores: ["Preta", "Amarela"], estampa: "Frente: assinatura e escudo · Costas: logo SK8FAMILY" },
+    { n: 8, fotos: 2, slug: "polo-sk8family", name: "Polo SK8FAMILY", tipo: "polo", colecao: "Logo",
+      tagline: "Gola polo, assinatura no peito.",
+      descricao: "Polo em piquet com a assinatura SK8FAMILY no peito.",
+      cores: ["Verde", "Branca", "Preta"], estampa: "Peito: assinatura SK8FAMILY" },
+    { n: 9, fotos: 1, slug: "polo-brasil", name: "Polo Brasil", tipo: "polo", colecao: "Brasil",
+      tagline: "A polo da seleção da família.",
+      descricao: "Polo com o escudo Brasil e a assinatura SK8FAMILY no peito.",
+      cores: ["Amarela", "Preta"], estampa: "Peito: escudo Brasil e assinatura" },
+    { n: 10, fotos: 3, slug: "moletom-college-azul", name: "Moletom College — Azul", tipo: "moletom", colecao: "Logo",
+      tagline: "Azul claro, logo college nas costas.",
+      descricao: "Moletom canguru azul claro com capuz, o logo SK8FAMILY grande nas costas, pequeno no peito e na manga.",
+      cor: "Azul claro", estampa: "Costas, peito e manga: logo college preto" },
+    { n: 11, fotos: 2, slug: "moletom-big-logo-preto", name: "Moletom Big Logo — Preto", tipo: "moletom", colecao: "Logo",
+      tagline: "O logo em letras grandes.",
+      descricao: "Moletom canguru preto com capuz e o logo SK8FAMILY em letras grandes brancas.",
+      cor: "Preto", estampa: "Logo SK8FAMILY grande em branco" },
+    { n: 12, fotos: 1, slug: "moletom-brasil", name: "Moletom Brasil — Preto", tipo: "moletom", colecao: "Brasil",
+      tagline: "Preto e amarelo, escudo no peito.",
+      descricao: "Moletom canguru preto com capuz, o escudo Brasil e a assinatura SK8FAMILY em amarelo no peito, na manga e no capuz.",
+      cor: "Preto", estampa: "Escudo Brasil e assinaturas em amarelo" },
+    { n: 13, fotos: 1, slug: "moletom-careca-xadrez", name: "Moletom Careca Xadrez — Cinza", tipo: "moletom", colecao: "Logo",
+      tagline: "Gola careca, xadrez cinza.",
+      descricao: "Moletom gola careca em xadrez cinza, com a assinatura SK8FAMILY em preto.",
+      cor: "Cinza xadrez", estampa: "Assinatura SK8FAMILY em preto" },
+    { n: 14, fotos: 1, slug: "calca-tactel-preta", name: "Calça Tactel — Preta", tipo: "calca-tactel", colecao: "Logo",
+      tagline: "Leve, com cordão e logo na perna.",
+      descricao: "Calça de tactel preta com elástico e cordão na cintura e o logo SK8FAMILY na perna.",
+      cor: "Preta", estampa: "Perna: logo SK8FAMILY" },
+    { n: 15, fotos: 1, slug: "calca-jeans-balao-preta", name: "Calça Jeans Balão — Preta", tipo: "calca-jeans", colecao: "Logo",
+      tagline: "Perna larga para andar solto.",
+      descricao: "Calça jeans balão preta, de perna larga, com o logo SK8FAMILY bordado.",
+      cor: "Preta", estampa: "Logo SK8FAMILY pequeno" },
+    { n: 16, fotos: 2, slug: "bermuda-globo-preta", name: "Bermuda Globo — Preta", tipo: "bermuda", colecao: "Logo",
+      tagline: "O globo da família na perna.",
+      descricao: "Bermuda preta com elástico na cintura, o globo Fundado em 2014 em uma perna e a assinatura SK8FAMILY na outra.",
+      cor: "Preta", estampa: "Globo SK8FAMILY e assinatura em branco" },
+    { n: 17, fotos: 1, slug: "bone-five-panel", name: "Boné Five Panel — Preto", tipo: "bone", colecao: "Logo",
+      tagline: "Cinco gomos, aba reta, um logo.",
+      descricao: "Boné five panel preto com o logo SK8FAMILY em branco na frente.",
+      cor: "Preto", estampa: "Frente: logo SK8FAMILY" },
   ];
 
-  const modelos = raw.map(([n, code, slug, name, tipo, collection, tagline, descricao, cor, estampa, preco, selo, mock]) => {
-    const f = fotos(n);
-    const t = TIPOS[tipo];
-    const precoNum = Number(preco.replace(/[^\d,]/g, "").replace(",", "."));
-    return { n, code, slug, name, tipo, tipoNome: t.nome, collection, tagline, descricao, cor, estampa, preco, precoNum,
-      selo, tecido: t.tecido, tamanhos: t.tamanhos, medidas: t.medidas, img: f.frente, fotos: f, mock };
+  const brl = (v) => "R$ " + v.toFixed(2).replace(".", ",");
+  const modelos = raw.map((p) => {
+    const t = TIPOS[p.tipo];
+    const f = fotos(p.n, p.fotos);
+    return { ...p, code: "SK-" + String(p.n).padStart(3, "0"), collection: p.colecao, tipoNome: t.nome,
+      preco: brl(t.preco), precoNum: t.preco, tamanhos: t.tamanhos, cores: p.cores || null,
+      cor: p.cor || p.cores.join(", "), selo: p.selo || "", img: f[0], fotos: f };
   });
 
   const colecoes = Array.from(new Set(modelos.map((m) => m.collection)));
-  const tipos = Array.from(new Set(modelos.map((m) => m.tipo))).map((id) => ({ id, nome: TIPOS[id].nome }));
+  const tipos = Array.from(new Set(modelos.map((m) => m.tipo))).map((id) => ({ id, nome: TIPOS[id].plural }));
+
+  // Página inicial: nome do drop (título da seção e faixa) e as peças em destaque, na ordem.
+  const DROP = "Drop 01";
+  const DESTAQUES = ["camiseta-drip-branca", "moletom-college-azul", "camiseta-brasil", "camiseta-yin-yang", "bermuda-globo-preta", "bone-five-panel"];
 
   // Slides da página inicial (carrossel). Fotos do Instagram da marca.
   //   etiqueta: selo pequeno · titulo: linha cheia · contorno: linha só com contorno
   //   botao + href: botão principal
   //   img: foto de fundo (fica em preto e branco sozinha) · pos: parte da foto que fica à mostra
   //        ("center 70%" = mais para baixo, "center 30%" = mais para cima)
-  //   Sem img, o slide mostra a peça do "slug" sobre fundo preto.
-  const heroSlides = [
-    { etiqueta: "Drop 01 · No ar", titulo: "Feito na rua.", contorno: "Pra rua.", botao: "Ver o drop", href: "/produtos?colecao=Drop%2001", img: "/assets/hero_1.jpg", pos: "center 78%" },
-    { etiqueta: "A família na pista", titulo: "Sessão", contorno: "todo dia.", botao: "Ver todas as peças", href: "/produtos", img: "/assets/hero_2.jpg", pos: "center 62%" },
-    { etiqueta: "Drop 01 · Limitado", titulo: "Malha pesada.", contorno: "Corte largo.", botao: "Ver o moletom", href: "/produtos/moletom-pesado-drop-01", img: "/assets/hero_3.jpg", pos: "center 24%" },
+    const heroSlides = [
+    { etiqueta: "Drop 01 · No ar", titulo: "Feito na rua.", contorno: "Pra rua.", botao: "Ver o drop", href: "/produtos", img: "/assets/hero_1.jpg", pos: "center 78%" },
+    { etiqueta: "A família na pista", titulo: "Sessão", contorno: "todo dia.", botao: "Ver as camisetas", href: "/produtos?tipo=camiseta", img: "/assets/hero_2.jpg", pos: "center 30%" },
+    { etiqueta: "Moletons", titulo: "Malha pesada.", contorno: "Corte largo.", botao: "Ver os moletons", href: "/produtos?tipo=moletom", img: "/assets/hero_3.jpg", pos: "center 24%" },
+    { etiqueta: "Original das Ruas", titulo: "Original", contorno: "das ruas.", botao: "Ver a coleção", href: "/produtos?colecao=Original%20das%20Ruas", img: "/assets/hero_5.jpg", pos: "center 45%" },
     { etiqueta: "Desde 2014", titulo: "Bem-vindo", contorno: "à família.", botao: "Conhecer a família", href: "/sobre", img: "/assets/hero_4.jpg", pos: "center 40%" },
-    { etiqueta: "Tiragem limitada", titulo: "Acabou,", contorno: "acabou.", botao: "Ver as camisetas", href: "/produtos?tipo=camiseta", img: "/assets/hero_5.jpg", pos: "center 55%" },
+    { etiqueta: "Tiragem limitada", titulo: "Acabou,", contorno: "acabou.", botao: "Ver todas as peças", href: "/produtos", img: "/assets/hero_6.jpg", pos: "center 42%" },
   ];
 
   function whatsLink(phone, text) {
@@ -143,5 +153,5 @@ window.SK8 = (function () {
     return `https://api.whatsapp.com/send${q ? "?" + q : ""}`;
   }
 
-  return { MARCA, WHATSAPP_PEDIDOS, FRETE, CUPONS, OWNERS, INSTAGRAM, SUPPORT_EMAIL, modelos, colecoes, tipos, heroSlides, whatsLink };
+  return { MARCA, WHATSAPP_PEDIDOS, FRETE, CUPONS, OWNERS, INSTAGRAM, SUPPORT_EMAIL, modelos, colecoes, tipos, heroSlides, DROP, DESTAQUES, whatsLink };
 })();
